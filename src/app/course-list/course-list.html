@@ -1,0 +1,16 @@
+<ul>
+  @for (course of courses(); track course.id) {
+    <li> {{ course.name }}</li>
+    @if (course.type === 'ONSITE') {
+      <span> — room {{ course.roomNumber }}</span>
+    } @else {
+      <span> — {{ course.meetingUrl }}</span>
+    }
+  } @empty {
+    <li>No courses yet</li>
+  }
+  <button (click)="renameFirst()">Rename Databases</button>
+  <button (click)="renameBad()">Bad rename</button>
+  <button (click)="getCourses()">Get courses</button>
+</ul>
+
