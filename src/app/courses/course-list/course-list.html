@@ -1,0 +1,20 @@
+<button (click)="reloadResources()">Reload courses</button>
+
+@if (resource.hasValue()) {
+  @if (resource.isLoading()) {
+    <p>Refreshing…</p>
+  }
+  <ul>
+    @for (course of resource.value(); track course.id) {
+      <li>
+        <app-course-card [course]="course" />
+      </li>
+    } @empty {
+      <li>No courses in the catalogue</li>
+    }
+  </ul>
+} @else if (resource.error()) {
+  <p class="error">Could not load courses.</p>
+} @else {
+  <p>Loading…</p>
+}

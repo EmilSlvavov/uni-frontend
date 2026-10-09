@@ -1,0 +1,20 @@
+@let c = course();
+
+@if (isLinkVisible()) {
+  <a [routerLink]="['/courses', c.id]"> {{c.name}}</a>
+  <p>{{c.type | courseTypeLabel}}</p>
+} @else {
+  <p>{{ c.name }} - {{ c.type | courseTypeLabel }}</p>
+}
+
+<p>{{ c.departmentName }}</p>
+
+@if (c.type === "ONLINE") {
+  <a appExternalLink [href]="c.meetingUrl">Join meeting</a>
+} @else {
+  <p>{{ c.roomNumber }}</p>
+}
+
+@if (canEnroll()){
+  <button (click)="onEnrollClick()">Enroll</button>
+}

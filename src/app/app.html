@@ -1,3 +1,24 @@
 <h1>{{ title() }}</h1>
 
-<app-course-list/>
+<nav>
+  <a routerLink="/courses">Courses</a>
+
+  @if (auth.isLoggedIn()) {
+    @let user = auth.currentUser();
+    <span>Logged in as {{ user ? user.name : '…' }}</span>
+    <a routerLink="/my-courses">My Courses</a>
+    <button type="button" (click)="onLogout()">Log out</button>
+  } @else {
+    <a routerLink="/login">Log in</a>
+    <a routerLink="/register">Register</a>
+  }
+</nav>
+
+@if (notifications.message(); as message) {
+  <div class="notification" role="alert">
+    <p>{{ message }}</p>
+    <button type="button" (click)="notifications.dismiss()">Dismiss</button>
+  </div>
+}
+
+<router-outlet />

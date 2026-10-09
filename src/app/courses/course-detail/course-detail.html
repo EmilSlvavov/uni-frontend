@@ -1,0 +1,33 @@
+@if (courseById.hasValue()) {
+  @if (courseById.isLoading()) {
+    <p>Refreshing…</p>
+  }
+  @let course = courseById.value();
+
+  <app-course-card
+    [course]="course"
+    [isLinkVisible]="false"
+    (enroll)="onEnroll(course.id)"
+    [canEnroll]="canEnroll()" />
+
+  @if (enrollError(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  @for (user of course.users; track user.id) {
+    <p>{{ user.name }}</p>
+  } @empty {
+    <p>No users enrolled!</p>
+  }
+
+  <a routerLink="/courses">Back to courses</a>
+} @else if (courseById.error()) {
+  @if (courseById.statusCode() === 404) {
+    <p class="error">This course doesn't exist.</p>
+  } @else {
+    <p class="error">Couldn't load the course. Try again.</p>
+    <button (click)="courseById.reload()">Retry</button>
+  }
+} @else {
+  <p>Loading…</p>
+}

@@ -1,1 +1,8 @@
-/* You can add global styles to this file, and also import other style files */
+.invalid { border: 1px solid red; }
+
+.error { color: red; }
+
+.notification {
+  border: 1px solid red;
+  padding: 0.5rem;
+}

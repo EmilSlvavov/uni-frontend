@@ -1,0 +1,19 @@
+@if (me.hasValue()) {
+  @let user = me.value();
+  @if (me.isLoading()) {
+    <p>Refreshing…</p>
+  }
+  <ul>
+    @for (course of user.courses; track course.id) {
+      <li>
+        <a [routerLink]="['/courses', course.id]">{{course.name}}</a>
+      </li>
+    } @empty {
+      <p>You are not enrolled in any courses</p>
+    }
+  </ul>
+} @else if (me.error()) {
+  <p class="error">Could not load courses.</p>
+} @else {
+  <p>Loading…</p>
+}
