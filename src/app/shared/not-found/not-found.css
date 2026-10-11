@@ -1,0 +1,11 @@
+.not-found {
+  margin: var(--space-5) auto;
+  text-align: center;
+}
+
+.code {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 3rem;
+  font-weight: 700;
+}

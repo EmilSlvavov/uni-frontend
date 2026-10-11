@@ -1,46 +1,45 @@
-<form novalidate (submit)="onLogin($event)">
-  <label for="email">Email</label>
-  <input id="email" type="email" [class.invalid]="loginForm
-  .email().touched() && loginForm
-  .email().invalid()" [formField]="loginForm
-  .email" />
+<section class="form-page">
+  <h2>Log in</h2>
 
-  @if (loginForm
-    .email().touched() && loginForm
-    .email().invalid()) {
-    @for (error of loginForm
-      .email().errors(); track error.kind) {
-      <p class="error">{{ error.message }}</p>
+  <form class="form" novalidate (submit)="onLogin($event)">
+    <div class="field">
+      <label for="email">Email</label>
+      @let emailBad = loginForm.email().touched() && loginForm.email().invalid();
+      <input id="email" type="email" autocomplete="email"
+             [formField]="loginForm.email" [class.invalid]="emailBad" />
+      @if (emailBad) {
+        @for (error of loginForm.email().errors(); track error.kind) {
+          <p class="error">{{ error.message }}</p>
+        }
+      }
+    </div>
+
+    <div class="field">
+      <label for="password">Password</label>
+      @let passwordBad = loginForm.password().touched() && loginForm.password().invalid();
+      <input id="password" type="password" autocomplete="current-password"
+             [formField]="loginForm.password" [class.invalid]="passwordBad" />
+      @if (passwordBad) {
+        @for (error of loginForm.password().errors(); track error.kind) {
+          <p class="error">{{ error.message }}</p>
+        }
+      }
+    </div>
+
+    @if (loginForm().errors().length > 0) {
+      <div class="form-errors" role="alert">
+        @for (error of loginForm().errors(); track error.kind) {
+          <p class="error">{{ error.message }}</p>
+        }
+      </div>
     }
-  }
-  <label for="password">Password</label>
-  <input id="password" type="password" [formField]="loginForm
-  .password" [class.invalid]="loginForm
-  .password().touched() && loginForm
-  .password().invalid()" />
 
-  @if (loginForm
-    .password().touched() && loginForm
-    .password().invalid()) {
-    @for (error of loginForm
-      .password().errors(); track error.kind) {
-      <p class="error">{{ error.message }}</p>
-    }
-  }
-
-  @for (error of loginForm
-  ().errors(); track error.kind) {
-    <p class="error">{{ error.message }}</p>
-  }
-
-  <button type="submit" [disabled]="loginForm
-  ().invalid() || loginForm
-  ().submitting()">
-    @if (loginForm
-    ().submitting()) {
-      Logging in...
-    } @else {
-      Login
-    }
-  </button>
-</form>
+    <button type="submit" [disabled]="loginForm().invalid() || loginForm().submitting()">
+      @if (loginForm().submitting()) {
+        Logging in…
+      } @else {
+        Log in
+      }
+    </button>
+  </form>
+</section>

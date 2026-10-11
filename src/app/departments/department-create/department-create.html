@@ -1,0 +1,33 @@
+<section class="form-page">
+  <h2>Create a department</h2>
+
+  <form class="form" novalidate (submit)="onSubmit($event)">
+    <div class="field">
+      <label for="name">Name</label>
+      @let nameBad = createDepartmentForm.name().touched() && createDepartmentForm.name().invalid();
+      <input id="name" autocomplete="off"
+             [formField]="createDepartmentForm.name" [class.invalid]="nameBad" />
+      @if (nameBad) {
+        @for (error of createDepartmentForm.name().errors(); track error.kind) {
+          <p class="error">{{ error.message }}</p>
+        }
+      }
+    </div>
+
+    @if (createDepartmentForm().errors().length > 0) {
+      <div class="form-errors" role="alert">
+        @for (error of createDepartmentForm().errors(); track error.kind) {
+          <p class="error">{{ error.message }}</p>
+        }
+      </div>
+    }
+
+    <button type="submit" [disabled]="createDepartmentForm().invalid() || createDepartmentForm().submitting()">
+      @if (createDepartmentForm().submitting()) {
+        Creating…
+      } @else {
+        Create
+      }
+    </button>
+  </form>
+</section>

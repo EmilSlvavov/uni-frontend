@@ -1,20 +1,28 @@
 @let c = course();
 
-@if (isLinkVisible()) {
-  <a [routerLink]="['/courses', c.id]"> {{c.name}}</a>
-  <p>{{c.type | courseTypeLabel}}</p>
-} @else {
-  <p>{{ c.name }} - {{ c.type | courseTypeLabel }}</p>
-}
+<article class="card">
+  <div class="card-header">
+    <h3 class="card-title">
+      @if (isLinkVisible()) {
+        <a [routerLink]="['/courses', c.id]">{{ c.name }}</a>
+      } @else {
+        {{ c.name }}
+      }
+    </h3>
+    <span class="badge" [class.badge-online]="c.type === 'ONLINE'">{{ c.type | courseTypeLabel }}</span>
+  </div>
 
-<p>{{ c.departmentName }}</p>
+  <p class="card-meta">{{ c.departmentName }}</p>
 
-@if (c.type === "ONLINE") {
-  <a appExternalLink [href]="c.meetingUrl">Join meeting</a>
-} @else {
-  <p>{{ c.roomNumber }}</p>
-}
+  <p class="card-location">
+    @if (c.type === 'ONLINE') {
+      <a appExternalLink [href]="c.meetingUrl">Join meeting</a>
+    } @else {
+      Room {{ c.roomNumber }}
+    }
+  </p>
 
-@if (canEnroll()){
-  <button (click)="onEnrollClick()">Enroll</button>
-}
+  @if (canEnroll()) {
+    <button type="button" (click)="onEnrollClick()">Enroll</button>
+  }
+</article>

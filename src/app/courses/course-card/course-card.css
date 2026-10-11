@@ -1,0 +1,42 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.card-meta {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
+
+.card-location {
+  margin: 0;
+}
+
+.card button {
+  align-self: flex-start;
+  margin-top: auto;
+}
+
+.badge {
+  flex-shrink: 0;
+  padding: 0.1rem var(--space-2);
+  border-radius: 999px;
+  background: var(--color-onsite-bg);
+  color: var(--color-onsite);
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.badge-online {
+  background: var(--color-online-bg);
+  color: var(--color-online);
+}

@@ -1,20 +1,23 @@
-<button (click)="reloadResources()">Reload courses</button>
+<div class="page-header">
+  <h2>Courses</h2>
+  <button type="button" class="btn-secondary" (click)="reloadResources()">Reload</button>
+</div>
 
 @if (resource.hasValue()) {
   @if (resource.isLoading()) {
-    <p>Refreshing…</p>
+    <p class="status">Refreshing…</p>
   }
-  <ul>
+  <ul class="course-grid plain-list">
     @for (course of resource.value(); track course.id) {
       <li>
         <app-course-card [course]="course" />
       </li>
     } @empty {
-      <li>No courses in the catalogue</li>
+      <li class="empty">No courses in the catalogue.</li>
     }
   </ul>
 } @else if (resource.error()) {
   <p class="error">Could not load courses.</p>
 } @else {
-  <p>Loading…</p>
+  <p class="status">Loading…</p>
 }

@@ -1,0 +1,32 @@
+@let d = department();
+
+<article class="card">
+  @if (isLinkVisible()) {
+    <h3 class="card-title">
+      <a [routerLink]="['/departments', d.id]">{{ d.name }}</a>
+    </h3>
+  } @else {
+    <h2 class="card-title">{{ d.name }}</h2>
+
+    <h3>Contacts</h3>
+    @if (d.contacts.length > 0) {
+      <dl class="contact-list">
+        @for (contact of d.contacts; track $index) {
+          <dt>{{ contact.type }}</dt>
+          <dd>{{ contact.value }}</dd>
+        }
+      </dl>
+    } @else {
+      <p class="empty">No contact details.</p>
+    }
+
+    <h3>Courses</h3>
+    <ul class="course-names plain-list">
+      @for (course of d.courses; track course.id) {
+        <li>{{ course.name }}</li>
+      } @empty {
+        <li class="empty">No courses in this department yet.</li>
+      }
+    </ul>
+  }
+</article>

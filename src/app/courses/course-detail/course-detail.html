@@ -1,33 +1,39 @@
+<a class="back-link" routerLink="/courses">← Back to courses</a>
+
 @if (courseById.hasValue()) {
-  @if (courseById.isLoading()) {
-    <p>Refreshing…</p>
-  }
   @let course = courseById.value();
 
-  <app-course-card
-    [course]="course"
-    [isLinkVisible]="false"
-    (enroll)="onEnroll(course.id)"
-    [canEnroll]="canEnroll()" />
+  <section class="detail">
+    @if (courseById.isLoading()) {
+      <p class="status">Refreshing…</p>
+    }
 
-  @if (enrollError(); as message) {
-    <p class="error">{{ message }}</p>
-  }
+    <app-course-card
+      [course]="course"
+      [isLinkVisible]="false"
+      (enroll)="onEnroll(course.id)"
+      [canEnroll]="canEnroll()" />
 
-  @for (user of course.users; track user.id) {
-    <p>{{ user.name }}</p>
-  } @empty {
-    <p>No users enrolled!</p>
-  }
+    @if (enrollError(); as message) {
+      <p class="error" role="alert">{{ message }}</p>
+    }
 
-  <a routerLink="/courses">Back to courses</a>
+    <h3>Enrolled students</h3>
+    <ul class="student-list plain-list">
+      @for (user of course.users; track user.id) {
+        <li>{{ user.name }}</li>
+      } @empty {
+        <li class="empty">Nobody is enrolled yet.</li>
+      }
+    </ul>
+  </section>
 } @else if (courseById.error()) {
   @if (courseById.statusCode() === 404) {
     <p class="error">This course doesn't exist.</p>
   } @else {
     <p class="error">Couldn't load the course. Try again.</p>
-    <button (click)="courseById.reload()">Retry</button>
+    <button type="button" (click)="courseById.reload()">Retry</button>
   }
 } @else {
-  <p>Loading…</p>
+  <p class="status">Loading…</p>
 }

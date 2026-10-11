@@ -1,0 +1,27 @@
+<a class="back-link" routerLink="/departments">← Back to departments</a>
+
+@if (departmentById.hasValue()) {
+  @let department = departmentById.value();
+
+  <section class="detail">
+    <app-department-card [isLinkVisible]="false" [department]="department" />
+
+    @if (auth.isAdmin()) {
+      <div class="admin-actions">
+        <button type="button" class="btn-danger" (click)="onSoftDelete()">Disable department</button>
+        @if (softDeleteError(); as message) {
+          <p class="error" role="alert">{{ message }}</p>
+        }
+      </div>
+    }
+  </section>
+} @else if (departmentById.error()) {
+  @if (departmentById.statusCode() === 404) {
+    <p class="error">This department doesn't exist.</p>
+  } @else {
+    <p class="error">Couldn't load the department. Try again.</p>
+    <button type="button" (click)="departmentById.reload()">Retry</button>
+  }
+} @else {
+  <p class="status">Loading…</p>
+}

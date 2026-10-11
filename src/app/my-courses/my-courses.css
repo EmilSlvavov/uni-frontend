@@ -1,0 +1,25 @@
+.my-course-list {
+  max-width: 40rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+}
+
+.my-course-list li + li {
+  border-top: 1px solid var(--color-border);
+}
+
+.my-course-list a {
+  display: block;
+  padding: var(--space-3);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.my-course-list a:hover {
+  background: var(--color-bg);
+}
+
+.my-course-list .empty {
+  padding: var(--space-3);
+}

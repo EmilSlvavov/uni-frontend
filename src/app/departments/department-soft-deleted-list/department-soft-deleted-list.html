@@ -1,0 +1,30 @@
+<a class="back-link" routerLink="/departments">← Back to departments</a>
+
+<div class="page-header">
+  <h2>Disabled departments</h2>
+</div>
+
+@if (restoreError(); as message) {
+  <p class="error" role="alert">{{ message }}</p>
+}
+
+@if (softDeletedResource.hasValue()) {
+  @if (softDeletedResource.isLoading()) {
+    <p class="status">Refreshing…</p>
+  }
+  <ul class="deleted-list plain-list">
+    @for (department of softDeletedResource.value(); track department.id) {
+      <li>
+        <span class="deleted-name">{{ department.name }}</span>
+        <button type="button" class="btn-secondary" (click)="onRestore(department.id)">Restore</button>
+      </li>
+    } @empty {
+      <li class="empty">No disabled departments.</li>
+    }
+  </ul>
+} @else if (softDeletedResource.error()) {
+  <p class="error">Could not load disabled departments.</p>
+  <button type="button" (click)="softDeletedResource.reload()">Retry</button>
+} @else {
+  <p class="status">Loading…</p>
+}

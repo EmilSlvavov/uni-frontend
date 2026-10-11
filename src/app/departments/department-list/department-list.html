@@ -1,0 +1,29 @@
+<div class="page-header">
+  <h2>Departments</h2>
+  <div class="page-actions">
+    @if (auth.isAdmin()) {
+      <a class="btn btn-secondary" routerLink="/departments/deleted">Disabled departments</a>
+      <a class="btn" routerLink="/departments/new">New department</a>
+    }
+    <button type="button" class="btn-secondary" (click)="reloadResources()">Reload</button>
+  </div>
+</div>
+
+@if (resource.hasValue()) {
+  @if (resource.isLoading()) {
+    <p class="status">Refreshing…</p>
+  }
+  <ul class="department-grid plain-list">
+    @for (department of resource.value(); track department.id) {
+      <li>
+        <app-department-card [department]="department" />
+      </li>
+    } @empty {
+      <li class="empty">No departments yet.</li>
+    }
+  </ul>
+} @else if (resource.error()) {
+  <p class="error">Could not load departments.</p>
+} @else {
+  <p class="status">Loading…</p>
+}
