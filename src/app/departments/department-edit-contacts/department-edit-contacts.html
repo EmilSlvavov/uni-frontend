@@ -1,0 +1,57 @@
+<a class="back-link" [routerLink]="['/departments', id()]">← Back to department</a>
+
+@if (departmentResource.hasValue()) {
+  <section class="form-page">
+    <h2>Contacts for {{ departmentResource.value().name }}</h2>
+
+    <form class="form" novalidate (submit)="onSave($event)">
+      <ul class="contact-rows plain-list">
+        @for (contact of contactsForm.contacts; track $index; let i = $index) {
+          <li class="contact-row">
+            <select [formField]="contact.type" [attr.aria-label]="'Contact ' + (i + 1) + ' type'">
+              @for (type of contactTypes; track type) {
+                <option [value]="type">{{ type }}</option>
+              }
+            </select>
+
+            @let valueBad = contact.value().touched() && contact.value().invalid();
+            <input [formField]="contact.value" [class.invalid]="valueBad"
+                   [attr.aria-label]="'Contact ' + (i + 1) + ' value'" />
+
+            <button type="button" class="btn-secondary" (click)="remove(i)">Remove</button>
+
+            @if (valueBad) {
+              @for (error of contact.value().errors(); track error.kind) {
+                <p class="error">{{ error.message }}</p>
+              }
+            }
+          </li>
+        } @empty {
+          <li class="empty">No contacts yet.</li>
+        }
+      </ul>
+
+      <button type="button" class="btn-secondary add-contact" (click)="add()">Add contact</button>
+
+      @if (contactsForm().errors().length > 0) {
+        <div class="form-errors" role="alert">
+          @for (error of contactsForm().errors(); track error.kind) {
+            <p class="error">{{ error.message }}</p>
+          }
+        </div>
+      }
+
+      <button type="submit" [disabled]="contactsForm().invalid() || contactsForm().submitting()">
+        @if (contactsForm().submitting()) {
+          Saving…
+        } @else {
+          Save contacts
+        }
+      </button>
+    </form>
+  </section>
+} @else if (departmentResource.error()) {
+  <p class="error">Couldn't load this department.</p>
+} @else {
+  <p class="status">Loading…</p>
+}

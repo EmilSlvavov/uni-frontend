@@ -19,6 +19,10 @@ export interface ContactInfo {
   value: string
 }
 
+export interface ContactInfoRequest {
+  contacts: ContactInfo[]
+}
+
 export interface DepartmentRequest {
   name: string
 }

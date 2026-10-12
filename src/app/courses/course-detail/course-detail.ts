@@ -32,7 +32,7 @@ export class CourseDetail {
 
   protected readonly enrollError = signal<string | null>(null);
 
-  protected async onEnroll(courseId: number): Promise<void> {
+  protected async  onEnroll(courseId: number): Promise<void> {
     const user = this.auth.currentUser();
     if (!user) {
       return;

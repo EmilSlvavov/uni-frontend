@@ -12,7 +12,9 @@ export class CourseService {
 
   readonly coursesResource = httpResource<Course[]>(() => {
     const id = this.selectedDepartmentId();
-    return id === null ? `${environment.apiUrl}/courses` : `${environment.apiUrl}/courses?departmentId=${id}`;
+    return id === null
+      ? `${environment.apiUrl}/courses`
+      : `${environment.apiUrl}/courses?departmentId=${id}`;
   });
 
   readonly courses = computed<Course[]>(() => {
@@ -26,7 +28,54 @@ export class CourseService {
   }
 
   async enroll(userId: number, courseId: number): Promise<void> {
-    await firstValueFrom(this.http.post<User>(`${environment.apiUrl}/users/${userId}/courses/${courseId}`, null));
+    await firstValueFrom(
+      this.http.post<User>(`${environment.apiUrl}/users/${userId}/courses/${courseId}`, null),
+    );
+  }
+
+  async createOnline(name: string, departmentId: number, meetingUrl: string): Promise<Course> {
+    const created = await firstValueFrom(
+      this.http.post<Course>(`${environment.apiUrl}/courses/online`, {
+        name,
+        departmentId,
+        meetingUrl,
+      }),
+    );
+    this.coursesResource.reload();
+    return created;
+  }
+
+  async createOnsite(name: string, departmentId: number, roomNumber: number): Promise<Course> {
+    const created = await firstValueFrom(
+      this.http.post<Course>(`${environment.apiUrl}/courses/onsite`, {
+        name,
+        departmentId,
+        roomNumber,
+      }),
+    );
+    this.coursesResource.reload();
+    return created;
+  }
+
+  async rename(courseId: number, name: string) {
+    await firstValueFrom(
+      this.http.put<Course>(`${environment.apiUrl}/courses/${courseId}`, { name }),
+    );
+    this.coursesResource.reload();
+  }
+
+  async softDelete(courseId: number) {
+    await firstValueFrom(
+      this.http.delete<void>(`${environment.apiUrl}/courses/softDeleted/${courseId}`),
+    );
+    this.coursesResource.reload();
+  }
+
+  async restoreSoftDelete(courseId: number) {
+    await firstValueFrom(
+      this.http.patch<void>(`${environment.apiUrl}/courses/softDeleted/${courseId}`, null),
+    );
+    this.coursesResource.reload();
   }
 
   readonly onsiteRooms = computed(() =>

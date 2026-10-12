@@ -1,6 +1,6 @@
 import { computed, inject, Service } from '@angular/core';
 import { HttpClient, httpResource } from '@angular/common/http';
-import { Department } from './department';
+import { ContactInfoRequest, Department } from './department';
 import { environment } from '../../environments/environment';
 import { firstValueFrom } from 'rxjs';
 
@@ -28,6 +28,13 @@ export class DepartmentService {
     await firstValueFrom(
       this.http.put<Department>(`${environment.apiUrl}/departments/${departmentId}`, { name }),
     );
+    this.departmentsResource.reload();
+  }
+
+  async replaceContacts(departmentId: number, contacts: ContactInfoRequest) {
+    await firstValueFrom(
+      this.http.put<Department>(`${environment.apiUrl}/departments/${departmentId}/contacts`, contacts)
+    )
     this.departmentsResource.reload();
   }
 

@@ -1,0 +1,33 @@
+<section class="form-page">
+  <h2>Rename a department</h2>
+
+  <form class="form" novalidate (submit)="onSubmit($event)">
+    <div class="field">
+      <label for="name">Name</label>
+      @let nameBad = renameDepartmentForm.name().touched() && renameDepartmentForm.name().invalid();
+      <input id="name" autocomplete="off"
+             [formField]="renameDepartmentForm.name" [class.invalid]="nameBad" />
+      @if (nameBad) {
+        @for (error of renameDepartmentForm.name().errors(); track error.kind) {
+          <p class="error">{{ error.message }}</p>
+        }
+      }
+    </div>
+
+    @if (renameDepartmentForm().errors().length > 0) {
+      <div class="form-errors" role="alert">
+        @for (error of renameDepartmentForm().errors(); track error.kind) {
+          <p class="error">{{ error.message }}</p>
+        }
+      </div>
+    }
+
+    <button type="submit" [disabled]="renameDepartmentForm().invalid() || renameDepartmentForm().submitting()">
+      @if (renameDepartmentForm().submitting()) {
+        Renaming…
+      } @else {
+        Rename
+      }
+    </button>
+  </form>
+</section>

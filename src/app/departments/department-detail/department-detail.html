@@ -12,6 +12,9 @@
         @if (softDeleteError(); as message) {
           <p class="error" role="alert">{{ message }}</p>
         }
+
+        <a [routerLink]="['/departments/editName', department.id]" >Edit department name</a>
+        <a [routerLink]="['/departments/editContacts', department.id]">Add/Edit department contacts</a>
       </div>
     }
   </section>

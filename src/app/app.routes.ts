@@ -10,6 +10,9 @@ import { DepartmentDetail } from './departments/department-detail/department-det
 import { roleGuard } from './auth/role.guard';
 import { DepartmentCreate } from './departments/department-create/department-create';
 import { DepartmentSoftDeletedList } from './departments/department-soft-deleted-list/department-soft-deleted-list';
+import { DepartmentEditName } from './departments/department-edit-name/department-edit-name';
+import { DepartmentEditContacts } from './departments/department-edit-contacts/department-edit-contacts';
+import { CourseCreate } from './courses/course-create/course-create';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'courses', pathMatch: 'full' },
@@ -23,8 +26,11 @@ export const routes: Routes = [
   { path: 'departments', component: DepartmentList },
   { path: 'departments/new', component: DepartmentCreate, canActivate: [roleGuard('ADMIN')] },
   { path: 'departments/deleted', component: DepartmentSoftDeletedList, canActivate: [roleGuard('ADMIN')] },
+  { path: 'departments/editName/:id', component: DepartmentEditName, canActivate: [roleGuard('ADMIN')]},
+  { path: 'departments/editContacts/:id', component: DepartmentEditContacts, canActivate: [roleGuard('ADMIN')]},
   { path: 'departments/:id', component: DepartmentDetail },
   { path: 'courses', component: CourseList },
+  { path: 'courses/new', component: CourseCreate, canActivate: [roleGuard('PROFESSOR', 'ADMIN')]},
   { path: 'courses/:id', component: CourseDetail },
   { path: '**', component: NotFound },
 ];

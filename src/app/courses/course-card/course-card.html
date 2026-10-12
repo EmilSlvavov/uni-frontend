@@ -14,6 +14,9 @@
 
   <p class="card-meta">{{ c.departmentName }}</p>
 
+  @if (c.lecturerName){
+    <p>Lecturer: {{c.lecturerName}}</p>
+  }
   <p class="card-location">
     @if (c.type === 'ONLINE') {
       <a appExternalLink [href]="c.meetingUrl">Join meeting</a>

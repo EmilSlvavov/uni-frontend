@@ -1,0 +1,97 @@
+<section class="form-page">
+  <h2>Create a course</h2>
+
+  <form class="form" novalidate (submit)="onSubmit($event)">
+    <div class="field">
+      <label for="name">Name</label>
+      @let nameBad = createCourseForm.name().touched() && createCourseForm.name().invalid();
+
+      <input id="name" autocomplete="off"
+             [formField]="createCourseForm.name" [class.invalid]="nameBad" />
+      @if (nameBad) {
+        @for (error of createCourseForm.name().errors(); track error.kind) {
+          <p class="error">{{ error.message }}</p>
+        }
+      }
+    </div>
+
+    <div class="field">
+      <label for="department">Department</label>
+      @let departmentBad = createCourseForm.departmentId().touched() && createCourseForm.departmentId().invalid();
+
+      <select id="department" [formField]="createCourseForm.departmentId" [class.invalid]="departmentBad">
+        <option value="">Choose a department</option>
+        @for (d of departments(); track d.id) {
+          <option [value]="d.id">{{ d.name }}</option>
+        }
+      </select>
+
+      @if (departmentBad) {
+        @for (error of createCourseForm.departmentId().errors(); track  error.kind) {
+          <p class="error">{{error.message}}</p>
+        }
+      }
+    </div>
+
+    <div class="field">
+      <label for="type">Course Type</label>
+      @let typeBad = createCourseForm.type().touched() && createCourseForm.type().invalid();
+
+      <select id="type" [formField]="createCourseForm.type" [class.invalid]="typeBad">
+        <option value="">Choose a type</option>
+        @for (type of courseTypes; track type) {
+          <option [value]="type">{{ type | courseTypeLabel }}</option>
+        }
+      </select>
+
+      @if (typeBad) {
+        @for (error of createCourseForm.type().errors(); track  error.kind) {
+          <p class="error">{{error.message}}</p>
+        }
+      }
+    </div>
+
+    @if (createCourseForm.type().value() === 'ONLINE') {
+      <div class="field">
+        <label for="meetingUrl">Meeting URL</label>
+        @let urlBad = createCourseForm.meetingUrl().touched() && createCourseForm.meetingUrl().invalid();
+        <input id="meetingUrl" autocomplete="off"
+               [formField]="createCourseForm.meetingUrl" [class.invalid]="urlBad" />
+        @if (urlBad) {
+          @for (error of createCourseForm.meetingUrl().errors(); track error.kind) {
+            <p class="error">{{ error.message }}</p>
+          }
+        }
+      </div>
+    }
+    @if (createCourseForm.type().value() === 'ONSITE') {
+      <div class="field">
+        <label for="roomNumber">Room Number</label>
+        @let numberBad = createCourseForm.roomNumber().touched() && createCourseForm.roomNumber().invalid();
+        <input type="number" id="roomNumber" autocomplete="off"
+               [formField]="createCourseForm.roomNumber" [class.invalid]="numberBad" />
+        @if (numberBad) {
+          @for (error of createCourseForm.roomNumber().errors(); track error.kind) {
+            <p class="error">{{ error.message }}</p>
+          }
+        }
+      </div>
+    }
+
+    @if (createCourseForm().errors().length > 0) {
+      <div class="form-errors" role="alert">
+        @for (error of createCourseForm().errors(); track error.kind) {
+          <p class="error">{{ error.message }}</p>
+        }
+      </div>
+    }
+
+    <button type="submit" [disabled]="createCourseForm().invalid() || createCourseForm().submitting()">
+      @if (createCourseForm().submitting()) {
+        Creating…
+      } @else {
+        Create
+      }
+    </button>
+  </form>
+</section>

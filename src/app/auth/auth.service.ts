@@ -1,4 +1,4 @@
-import { computed, inject, Service, signal } from '@angular/core';
+import { computed, inject, Injector, Service, signal } from '@angular/core';
 import { HttpClient, HttpErrorResponse, httpResource } from '@angular/common/http';
 import { LoginResponse, Me, RegisterModel, User } from './user';
 import { filter, firstValueFrom, Observable, take } from 'rxjs';
@@ -12,6 +12,7 @@ export class AuthService {
   private readonly storageKey = 'uni.session';
   private readonly session = signal<LoginResponse | null>(this.loadSession());
   private readonly router = inject(Router);
+  private readonly injector = inject(Injector);
 
   private refreshInFlight: Promise<string | null> | null = null;
 
@@ -45,13 +46,12 @@ export class AuthService {
   });
 
   whenUserResolved(): Observable<Me | null> {
-    return this.resolvedUser$.pipe(
+    return toObservable(this.resolvedUser, { injector: this.injector }).pipe(
       filter((user): user is Me | null => user !== undefined),
       take(1),
     );
   }
 
-  private readonly resolvedUser$ = toObservable(this.resolvedUser);
 
   async login(email: string, password: string): Promise<void> {
     const response = await firstValueFrom(

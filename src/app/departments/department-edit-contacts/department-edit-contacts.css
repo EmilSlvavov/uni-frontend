@@ -1,0 +1,35 @@
+.form-page {
+  max-width: 40rem;
+}
+
+.contact-rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.contact-row {
+  display: grid;
+  grid-template-columns: 8rem 1fr auto;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.contact-row .error {
+  grid-column: 1 / -1;
+}
+
+.add-contact {
+  align-self: flex-start;
+}
+
+@media (max-width: 40rem) {
+  .contact-row {
+    grid-template-columns: 1fr auto;
+  }
+
+  .contact-row input {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+}
