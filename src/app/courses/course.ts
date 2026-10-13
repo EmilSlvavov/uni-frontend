@@ -21,15 +21,6 @@ export interface OnlineCourse extends CourseBase {
 }
 export type Course = OnsiteCourse | OnlineCourse;
 
-export interface CourseSoftDelete {
-  id: number;
-  name: string;
-  departmentId: number;
-  departmentName: string;
-  lecturerId?: number;
-  lecturerName?: string;
-  isDeleted: boolean;
-}
 
 export interface CourseCreateRequest {
   type: CourseType | '';
@@ -40,3 +31,20 @@ export interface CourseCreateRequest {
 }
 
 export type CourseType = 'ONLINE' | 'ONSITE';
+
+export interface CourseUpdateRequest {
+  name: string;
+}
+
+export interface SoftDeletedCourse {
+  id: number;
+  name: string;
+  departmentId: number;
+  departmentName: string;
+  lecturerId?: number;
+  lecturerName?: string;
+  type: CourseType;
+  meetingUrl?: string;
+  roomNumber?: number;
+  isDeleted: boolean;
+}

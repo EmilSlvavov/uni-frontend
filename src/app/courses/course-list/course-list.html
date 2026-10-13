@@ -1,6 +1,12 @@
 <div class="page-header">
   <h2>Courses</h2>
-  <button type="button" class="btn-secondary" (click)="reloadResources()">Reload</button>
+  <div class="page-actions">
+    @if (auth.isAdmin() || auth.isProfessor()) {
+      <a class="btn btn-secondary" routerLink="/courses/deleted">Disabled courses</a>
+      <a class="btn" routerLink="/courses/new">New course</a>
+    }
+    <button type="button" class="btn-secondary" (click)="reloadResources()">Reload</button>
+  </div>
 </div>
 
 @if (resource.hasValue()) {

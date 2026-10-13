@@ -1,0 +1,44 @@
+<section class="form-page">
+  <h2>Rename a course</h2>
+
+  @if (courseById.hasValue()) {
+    <form class="form" novalidate (submit)="onSubmit($event)">
+      <div class="field">
+        <label for="name">Name</label>
+        @let nameBad = renameCourseForm.name().touched() && renameCourseForm.name().invalid();
+        <input id="name" autocomplete="off"
+               [formField]="renameCourseForm.name" [class.invalid]="nameBad" />
+        @if (nameBad) {
+          @for (error of renameCourseForm.name().errors(); track error.kind) {
+            <p class="error">{{ error.message }}</p>
+          }
+        }
+      </div>
+
+      @if (renameCourseForm().errors().length > 0) {
+        <div class="form-errors" role="alert">
+          @for (error of renameCourseForm().errors(); track error.kind) {
+            <p class="error">{{ error.message }}</p>
+          }
+        </div>
+      }
+
+      <button type="submit" [disabled]="renameCourseForm().invalid() || renameCourseForm().submitting()">
+        @if (renameCourseForm().submitting()) {
+          Renaming…
+        } @else {
+          Rename
+        }
+      </button>
+    </form>
+  } @else if (courseById.error()) {
+    @if (courseById.statusCode() === 404) {
+      <p class="error">This course doesn't exist.</p>
+    } @else {
+      <p class="error">Couldn't load the course. Try again.</p>
+      <button type="button" (click)="courseById.reload()">Retry</button>
+    }
+  } @else {
+    <p class="status">Loading…</p>
+  }
+</section>

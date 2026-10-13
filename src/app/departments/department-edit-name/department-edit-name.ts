@@ -34,7 +34,7 @@ export class DepartmentEditName {
     await submit(this.renameDepartmentForm, async (form) => {
       try {
         await this.departmentService.rename(this.id(), form().value().name);
-        await this.router.navigate(['/departments']);
+        await this.router.navigate(['/departments', this.id()]);
 
         return undefined;
       } catch (err) {

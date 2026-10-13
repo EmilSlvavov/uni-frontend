@@ -12,9 +12,22 @@
       [course]="course"
       [isLinkVisible]="false"
       (enroll)="onEnroll(course.id)"
-      [canEnroll]="canEnroll()" />
+      [canEnroll]="canEnroll()"
+      (softDelete)="onSoftDelete()"
+      [canSoftDelete]="canManage()"
+    />
+
+    @if (canManage()) {
+      <div class="page-actions">
+        <a class="btn btn-secondary" [routerLink]="['/courses/edit', course.id]">Edit name</a>
+      </div>
+    }
 
     @if (enrollError(); as message) {
+      <p class="error" role="alert">{{ message }}</p>
+    }
+
+    @if (softDeleteError(); as message) {
       <p class="error" role="alert">{{ message }}</p>
     }
 

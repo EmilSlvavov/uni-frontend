@@ -15,7 +15,7 @@
   <p class="card-meta">{{ c.departmentName }}</p>
 
   @if (c.lecturerName){
-    <p>Lecturer: {{c.lecturerName}}</p>
+    <p class="card-meta">Lecturer: {{c.lecturerName}}</p>
   }
   <p class="card-location">
     @if (c.type === 'ONLINE') {
@@ -27,5 +27,9 @@
 
   @if (canEnroll()) {
     <button type="button" (click)="onEnrollClick()">Enroll</button>
+  }
+
+  @if (canSoftDelete()) {
+    <button type="button" class="btn-danger" (click)="onSoftDeleteClick()">Disable</button>
   }
 </article>

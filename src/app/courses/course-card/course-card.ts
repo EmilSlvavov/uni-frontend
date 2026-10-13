@@ -14,9 +14,15 @@ export class CourseCard {
   readonly course = input.required<Course>();
   readonly isLinkVisible = input(true);
   readonly canEnroll = input(false);
+  readonly canSoftDelete = input(false);
   readonly enroll = output<number>();
+  readonly softDelete = output<void>();
 
   protected onEnrollClick(): void {
-    this.enroll.emit(this.course().id)
+    this.enroll.emit(this.course().id);
+  }
+
+  protected onSoftDeleteClick(): void {
+    this.softDelete.emit();
   }
 }

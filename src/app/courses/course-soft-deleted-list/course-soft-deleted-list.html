@@ -1,0 +1,38 @@
+<a class="back-link" routerLink="/courses">← Back to courses</a>
+
+<div class="page-header">
+  <h2>Disabled courses</h2>
+</div>
+
+@if (restoreError(); as message) {
+  <p class="error" role="alert">{{ message }}</p>
+}
+
+@if (softDeletedResource.hasValue()) {
+  @if (softDeletedResource.isLoading()) {
+    <p class="status">Refreshing…</p>
+  }
+  <ul class="deleted-list plain-list">
+    @for (course of softDeletedResource.value(); track course.id) {
+      <li>
+        <div class="deleted-info">
+          <span class="deleted-name">{{ course.name }}</span>
+          <span class="deleted-meta">
+            <span>{{course.departmentName}}</span>
+            @if (course.lecturerName) {
+              <span>{{course.lecturerName}}</span>
+            }
+          </span>
+        </div>
+        <button type="button" class="btn-secondary" (click)="onRestore(course.id)">Restore</button>
+      </li>
+    } @empty {
+      <li class="empty">No disabled courses.</li>
+    }
+  </ul>
+} @else if (softDeletedResource.error()) {
+  <p class="error">Could not load disabled courses.</p>
+  <button type="button" (click)="softDeletedResource.reload()">Retry</button>
+} @else {
+  <p class="status">Loading…</p>
+}
