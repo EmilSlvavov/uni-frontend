@@ -37,3 +37,17 @@ export interface Me {
   email: string;
   role: 'STUDENT' | 'PROFESSOR' | 'ADMIN';
 }
+
+export interface UserUpdateName{
+  name: string
+}
+
+export interface UserUpdateAbout {
+  bio: string
+  dateOfBirth: any
+}
+
+export interface UserUpdatePassword {
+  currentPassword: string
+  newPassword: string
+}

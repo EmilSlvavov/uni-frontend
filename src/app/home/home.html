@@ -1,0 +1,80 @@
+<div class="home">
+  @if (auth.isLoggedIn()) {
+    <header class="home-hero">
+      <h2>Welcome, {{user()!.name}}</h2>
+    </header>
+
+    @if (user()!.role === 'STUDENT') {
+      @if (studentResource.hasValue()) {
+        @let courses = studentResource.value()!.courses;
+
+        <section class="home-block">
+          <h3>Your courses</h3>
+          <ul class="home-list plain-list">
+            @for (course of courses; track course.id) {
+              <li>{{course.name}}</li>
+            }
+          </ul>
+        </section>
+      }
+      <nav class="home-shortcuts" aria-label="Shortcuts">
+        <a class="shortcut" routerLink="/courses">Browse courses</a>
+        <a class="shortcut" routerLink="/profile">Your profile</a>
+      </nav>
+    }
+
+    @if (user()!.role === 'PROFESSOR') {
+      <section class="home-block">
+        <h3>Courses you teach</h3>
+        <ul class="home-list plain-list">
+          @for (course of professorCourses(); track course.id) {
+            <li>
+              <span class="home-list-name">{{course.name}}</span>
+              <span class="home-list-meta">{{course.departmentName}}</span>
+            </li>
+          } @empty {
+            <li class="empty">You still have no courses</li>
+          }
+        </ul>
+      </section>
+      <nav class="home-shortcuts" aria-label="Shortcuts">
+        <a class="shortcut" routerLink="/courses/new">New course</a>
+        <a class="shortcut" routerLink="/courses/deleted">Disabled courses</a>
+        <a class="shortcut" routerLink="/courses">Browse courses</a>
+        <a class="shortcut" routerLink="/profile">Your profile</a>
+      </nav>
+    }
+
+    @if (user()!.role === 'ADMIN') {
+      <section class="home-stats" aria-label="Statistics">
+        <div class="stat">
+          <span class="stat-value">{{adminUserCount()}}</span>
+          <span class="stat-label">Active users</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">{{adminCourseCount()}}</span>
+          <span class="stat-label">Active courses</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">{{adminDepartmentCount()}}</span>
+          <span class="stat-label">Active departments</span>
+        </div>
+      </section>
+      <nav class="home-shortcuts" aria-label="Shortcuts">
+        <a class="shortcut" routerLink="/departments/new">New department</a>
+        <a class="shortcut" routerLink="/departments/deleted">Disabled departments</a>
+        <a class="shortcut" routerLink="/courses/new">New course</a>
+        <a class="shortcut" routerLink="/courses/deleted">Disabled courses</a>
+      </nav>
+    }
+  } @else {
+    <header class="home-hero">
+      <h2>Welcome</h2>
+      <p class="home-lead">Make an account to use all functions of the platform</p>
+    </header>
+    <nav class="home-shortcuts" aria-label="Shortcuts">
+      <a class="shortcut" routerLink="/courses">Browse courses</a>
+      <a class="shortcut" routerLink="/departments">Browse departments</a>
+    </nav>
+  }
+</div>

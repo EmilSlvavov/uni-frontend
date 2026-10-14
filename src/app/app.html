@@ -1,6 +1,6 @@
 <header class="app-header">
   <div class="app-header-inner">
-    <h1 class="brand"><a routerLink="/courses">{{ title() }}</a></h1>
+    <h1 class="brand"><a routerLink="/">{{ title() }}</a></h1>
 
     <nav class="app-nav" aria-label="Main">
       <a routerLink="/departments" routerLinkActive="active">Departments</a>
@@ -8,8 +8,14 @@
 
       @if (auth.isLoggedIn()) {
         @let user = auth.currentUser();
-        <a routerLink="/my-courses" routerLinkActive="active">My courses</a>
-        <span class="nav-user">Logged in as <strong>{{ user ? user.name : '…' }}</strong></span>
+        @if (auth.isAdmin()) {
+          <a routerLink="/users/list" routerLinkActive="active">Users</a>
+        } @else {
+          <a routerLink="/my-courses" routerLinkActive="active">My courses</a>
+        }
+        <a class="nav-user" routerLink="/profile" routerLinkActive="active">
+          Logged in as <strong>{{ user ? user.name : '…' }}</strong>
+        </a>
         <button type="button" class="btn-secondary" (click)="onLogout()">Log out</button>
       } @else {
         <a class="nav-push" routerLink="/login" routerLinkActive="active">Log in</a>

@@ -15,9 +15,12 @@ import { DepartmentEditContacts } from './departments/department-edit-contacts/d
 import { CourseCreate } from './courses/course-create/course-create';
 import { CourseEdit } from './courses/course-edit/course-edit';
 import { CourseSoftDeletedList } from './courses/course-soft-deleted-list/course-soft-deleted-list';
+import { UserProfile } from './users/user-profile/user-profile';
+import { UserList } from './users/user-list/user-list';
+import { Home } from './home/home';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'courses', pathMatch: 'full' },
+  { path: '', component: Home, pathMatch: 'full' },
   { path: 'login', component: Login },
   { path: 'register', component: Register },
   {
@@ -36,5 +39,8 @@ export const routes: Routes = [
   { path: 'courses/deleted', component: CourseSoftDeletedList, canActivate: [roleGuard('PROFESSOR', 'ADMIN')]},
   { path: 'courses/edit/:id', component: CourseEdit, canActivate: [roleGuard('PROFESSOR', 'ADMIN')]},
   { path: 'courses/:id', component: CourseDetail },
+  { path: 'users/list', component: UserList, canActivate: [roleGuard('ADMIN')]},
+  { path: 'profile', component: UserProfile, canActivate: [authGuard] },
+  { path: 'profile/:id', component: UserProfile, canActivate: [roleGuard('ADMIN')] },
   { path: '**', component: NotFound },
 ];

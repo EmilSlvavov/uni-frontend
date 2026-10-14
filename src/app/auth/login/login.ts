@@ -45,7 +45,7 @@ export class Login {
 
         await this.auth.login(email, password);
 
-        await this.router.navigateByUrl(this.returnUrl() ?? '/courses');
+        await this.router.navigateByUrl(this.returnUrl() ?? '/');
 
         return undefined;
       } catch (err) {

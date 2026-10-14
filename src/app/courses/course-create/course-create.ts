@@ -35,7 +35,7 @@ export class CourseCreate {
       message: 'name must be at most 150 characters',
     });
 
-    required(path.departmentId, { message: 'dep artment is required' });
+    required(path.departmentId, { message: 'department is required' });
 
     required(path.type, { message: 'type is required' });
 

@@ -1,0 +1,155 @@
+<a class="back-link" routerLink="/">← Back to home</a>
+
+@if (userResource.hasValue()) {
+  <div class="profile">
+    <header class="profile-header">
+      <h2>{{userResource.value().name}}</h2>
+      <p class="profile-meta">
+        <span>{{userResource.value().email}}</span>
+        @if (isAccessingSelf()) {
+          <span>{{auth.currentUser()!.role}}</span>
+        }
+      </p>
+      @if (userResource.value().bio) {
+        <p class="profile-bio">{{userResource.value().bio}}</p>
+      }
+      @if (userResource.value().dateOfBirth) {
+        <p class="profile-meta">Born {{userResource.value().dateOfBirth}}</p>
+      }
+    </header>
+
+    <section class="profile-section">
+      <h3>Name</h3>
+      <form class="form" (submit)="onSubmitName($event)" novalidate>
+        <div class="field">
+          <label for="name">Name</label>
+          @let nameBad = userNameUpdateForm.name().touched() && userNameUpdateForm.name().invalid();
+          <input id="name" autocomplete="off" type="text"
+                 [formField]="userNameUpdateForm.name" [class.invalid]="nameBad" />
+          @if (nameBad) {
+            @for (error of userNameUpdateForm.name().errors(); track error.kind) {
+              <p class="error">{{ error.message }}</p>
+            }
+          }
+        </div>
+
+        @if (userNameUpdateForm().errors().length > 0) {
+          <div class="form-errors" role="alert">
+            @for (error of userNameUpdateForm().errors(); track error.kind) {
+              <p class="error">{{ error.message }}</p>
+            }
+          </div>
+        }
+
+        <button type="submit" [disabled]="userNameUpdateForm().invalid() || userNameUpdateForm().submitting()">
+          @if (userNameUpdateForm().submitting()) {
+            Renaming…
+          } @else {
+            Rename
+          }
+        </button>
+      </form>
+    </section>
+
+    <section class="profile-section">
+      <h3>About</h3>
+      <form class="form" (submit)="onSubmitAbout($event)" novalidate>
+        <div class="field">
+          <label for="bio">Bio</label>
+          @let bioBad = userUpdateAboutForm.bio().touched() && userUpdateAboutForm.bio().invalid();
+          <textarea id="bio" rows="4"
+                 [formField]="userUpdateAboutForm.bio" [class.invalid]="bioBad"></textarea>
+          @if (bioBad) {
+            @for (error of userUpdateAboutForm.bio().errors(); track error.kind) {
+              <p class="error">{{ error.message }}</p>
+            }
+          }
+        </div>
+
+        <div class="field">
+          <label for="dateOfBirth">Date Of Birth</label>
+          @let dateBad = userUpdateAboutForm.dateOfBirth().touched() && userUpdateAboutForm.dateOfBirth().invalid();
+          <input id="dateOfBirth" autocomplete="off" type="date"
+                 [formField]="userUpdateAboutForm.dateOfBirth" [class.invalid]="dateBad" />
+          @if (dateBad) {
+            @for (error of userUpdateAboutForm.dateOfBirth().errors(); track error.kind) {
+              <p class="error">{{ error.message }}</p>
+            }
+          }
+        </div>
+
+        @if (userUpdateAboutForm().errors().length > 0) {
+          <div class="form-errors" role="alert">
+            @for (error of userUpdateAboutForm().errors(); track error.kind) {
+              <p class="error">{{ error.message }}</p>
+            }
+          </div>
+        }
+
+        <button type="submit" [disabled]="userUpdateAboutForm().invalid() || userUpdateAboutForm().submitting()">
+          @if (userUpdateAboutForm().submitting()) {
+            Editing About…
+          } @else {
+            Edit About
+          }
+        </button>
+      </form>
+    </section>
+
+    <section class="profile-section">
+      <h3>Password</h3>
+      <form class="form" (submit)="onSubmitPassword($event)" novalidate>
+        @if (isAccessingSelf()) {
+          <div class="field">
+            <label for="currentPassword">Current Password</label>
+            @let currentBad = userUpdatePasswordForm.currentPassword().touched() && userUpdatePasswordForm.currentPassword().invalid();
+            <input id="currentPassword" autocomplete="current-password" type="password"
+                   [formField]="userUpdatePasswordForm.currentPassword" [class.invalid]="currentBad" />
+            @if (currentBad) {
+              @for (error of userUpdatePasswordForm.currentPassword().errors(); track error.kind) {
+                <p class="error">{{ error.message }}</p>
+              }
+            }
+          </div>
+        }
+
+        <div class="field">
+          <label for="newPassword">New Password</label>
+          @let newBad = userUpdatePasswordForm.newPassword().touched() && userUpdatePasswordForm.newPassword().invalid();
+          <input id="newPassword" autocomplete="new-password" type="password"
+                 [formField]="userUpdatePasswordForm.newPassword" [class.invalid]="newBad" />
+          @if (newBad) {
+            @for (error of userUpdatePasswordForm.newPassword().errors(); track error.kind) {
+              <p class="error">{{ error.message }}</p>
+            }
+          }
+        </div>
+
+        @if (userUpdatePasswordForm().errors().length > 0) {
+          <div class="form-errors" role="alert">
+            @for (error of userUpdatePasswordForm().errors(); track error.kind) {
+              <p class="error">{{ error.message }}</p>
+            }
+          </div>
+        }
+
+        <button type="submit" [disabled]="userUpdatePasswordForm().invalid() || userUpdatePasswordForm().submitting()">
+          @if (userUpdatePasswordForm().submitting()) {
+            Changing Password…
+          } @else {
+            Change Password
+          }
+        </button>
+      </form>
+    </section>
+  </div>
+} @else if (userResource.error()) {
+  @if (userResource.statusCode() === 404) {
+    <p class="error">This user doesn't exist.</p>
+  } @else {
+    <p class="error">Couldn't load the user. Try again.</p>
+    <button type="button" (click)="userResource.reload()">Retry</button>
+  }
+} @else {
+  <p class="status">Loading…</p>
+}

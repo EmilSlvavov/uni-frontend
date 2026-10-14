@@ -17,6 +17,6 @@ export class App {
 
   protected async onLogout(): Promise<void> {
     await this.auth.logout();
-    await this.router.navigate(['/courses']);
+    await this.router.navigate(['/']);
   }
 }

@@ -1,0 +1,26 @@
+<div class="page-header">
+  <h2>Users</h2>
+  <div class="page-actions">
+    <button type="button" class="btn-secondary" (click)="reloadResources()">Reload</button>
+  </div>
+</div>
+
+@if (userResource.hasValue()) {
+  @if (userResource.isLoading()) {
+    <p class="status">Refreshing…</p>
+  }
+  <ul class="user-list plain-list">
+    @for (user of userResource.value(); track user.id) {
+      <li>
+        <a class="user-name" [routerLink]="['/profile', user.id]">{{user.name}}</a>
+        <p class="user-email">{{user.email}}</p>
+      </li>
+    } @empty {
+      <li class="empty">No users yet.</li>
+    }
+  </ul>
+} @else if (userResource.error()) {
+  <p class="error">Could not load users.</p>
+} @else {
+  <p class="status">Loading…</p>
+}
