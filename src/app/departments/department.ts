@@ -30,3 +30,6 @@ export interface DepartmentRequest {
 export type ContactType = 'EMAIL' | 'PHONE' | 'OFFICE';
 
 
+export interface DepartmentSearchForm {
+  q: string
+}

@@ -9,19 +9,52 @@
   </div>
 </div>
 
+<form class="search-bar" role="search" (submit)="onSearch($event)" novalidate>
+  <div class="field search-field">
+    <label for="q">Search</label>
+    <input id="q" type="search" [formField]="searchForm.q" />
+  </div>
+
+  <div class="field">
+    <label for="type">Type</label>
+    <select id="type" [formField]="searchForm.type">
+      <option value="">All types</option>
+      <option value="ONLINE">Online</option>
+      <option value="ONSITE">On-site</option>
+    </select>
+  </div>
+
+  <button type="submit">Search</button>
+</form>
+
 @if (resource.hasValue()) {
   @if (resource.isLoading()) {
     <p class="status">Refreshing…</p>
   }
+  @let page = resource.value().page;
   <ul class="course-grid plain-list">
-    @for (course of resource.value(); track course.id) {
+    @for (course of resource.value().content; track course.id) {
       <li>
         <app-course-card [course]="course" />
       </li>
     } @empty {
-      <li class="empty">No courses in the catalogue.</li>
+      <li class="empty">{{ q() || type() ? 'No courses match your search.' : 'No courses in the catalogue.' }}</li>
     }
   </ul>
+
+  @if (page.totalPages > 1) {
+    <nav class="pager" aria-label="Pagination">
+      <button type="button" class="btn-secondary" (click)="goToPage(page.number - 1)" [disabled]="page.number === 0">Previous</button>
+      @for (p of pageNumbers(); track p; let i = $index) {
+        @if (i > 0 && p - pageNumbers()[i - 1] > 1) {
+          <span class="pager-gap">…</span>
+        }
+        <button type="button" class="pager-page" (click)="goToPage(p)" [disabled]="p === page.number"
+                [attr.aria-current]="p === page.number ? 'page' : null">{{ p + 1 }}</button>
+      }
+      <button type="button" class="btn-secondary" (click)="goToPage(page.number + 1)" [disabled]="page.number + 1 >= page.totalPages">Next</button>
+    </nav>
+  }
 } @else if (resource.error()) {
   <p class="error">Could not load courses.</p>
 } @else {

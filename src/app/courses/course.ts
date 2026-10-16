@@ -48,3 +48,8 @@ export interface SoftDeletedCourse {
   roomNumber?: number;
   isDeleted: boolean;
 }
+
+export interface CourseSearchForm {
+  q: string,
+  type: CourseType | ''
+}

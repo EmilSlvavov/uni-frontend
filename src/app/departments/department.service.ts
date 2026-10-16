@@ -3,20 +3,21 @@ import { HttpClient, httpResource } from '@angular/common/http';
 import { ContactInfoRequest, Department } from './department';
 import { environment } from '../../environments/environment';
 import { firstValueFrom } from 'rxjs';
+import { Page } from '../shared/page';
 
 @Service()
 export class DepartmentService {
 
   private readonly http = inject(HttpClient);
 
-  readonly departmentsResource = httpResource<Department[]>(() => {
-    return `${environment.apiUrl}/departments`;
+  readonly departmentsResource = httpResource<Page<Department>>(() => {
+    return `${environment.apiUrl}/departments?size=100&sort=name`;
   });
 
   readonly departments = computed<Department[]>(() => {
     const resource = this.departmentsResource;
 
-    return resource.hasValue() ? resource.value() : [];
+    return resource.hasValue() ? resource.value().content : [];
   });
 
   async create(name: string): Promise<void> {

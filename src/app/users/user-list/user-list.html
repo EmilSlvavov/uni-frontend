@@ -5,21 +5,59 @@
   </div>
 </div>
 
-@if (userResource.hasValue()) {
-  @if (userResource.isLoading()) {
+<form class="search-bar" role="search" (submit)="onSearch($event)" novalidate>
+  <div class="field search-field">
+    <label for="q">Search</label>
+    <input id="q" type="search" [formField]="searchForm.q" />
+  </div>
+
+  <div class="field">
+    <label for="type">Role</label>
+    <select id="type" [formField]="searchForm.role">
+      <option value="">All roles</option>
+      <option value="STUDENT">Student</option>
+      <option value="PROFESSOR">Professor</option>
+      <option value="ADMIN">Admin</option>
+
+    </select>
+  </div>
+
+  <button type="submit">Search</button>
+</form>
+
+@if (resource.hasValue()) {
+  @if (resource.isLoading()) {
     <p class="status">Refreshing…</p>
   }
+
+  @let page = resource.value().page;
+
   <ul class="user-list plain-list">
-    @for (user of userResource.value(); track user.id) {
+    @for (user of resource.value().content; track user.id) {
       <li>
         <a class="user-name" [routerLink]="['/profile', user.id]">{{user.name}}</a>
         <p class="user-email">{{user.email}}</p>
       </li>
     } @empty {
-      <li class="empty">No users yet.</li>
+      <li class="empty">{{ q() || role() ? 'No users match your search.' : 'No users yet.' }}</li>
     }
   </ul>
-} @else if (userResource.error()) {
+
+  @if (page.totalPages > 1) {
+    <nav class="pager" aria-label="Pagination">
+      <button type="button" class="btn-secondary" (click)="goToPage(page.number - 1)" [disabled]="page.number === 0">Previous</button>
+      @for (p of pageNumbers(); track p; let i = $index) {
+        @if (i > 0 && p - pageNumbers()[i - 1] > 1) {
+          <span class="pager-gap">…</span>
+        }
+        <button type="button" class="pager-page" (click)="goToPage(p)" [disabled]="p === page.number"
+                [attr.aria-current]="p === page.number ? 'page' : null">{{ p + 1 }}</button>
+      }
+      <button type="button" class="btn-secondary" (click)="goToPage(page.number + 1)" [disabled]="page.number + 1 >= page.totalPages">Next</button>
+    </nav>
+  }
+
+} @else if (resource.error()) {
   <p class="error">Could not load users.</p>
 } @else {
   <p class="status">Loading…</p>

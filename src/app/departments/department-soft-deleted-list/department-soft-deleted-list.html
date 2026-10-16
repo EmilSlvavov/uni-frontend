@@ -12,8 +12,9 @@
   @if (softDeletedResource.isLoading()) {
     <p class="status">Refreshing…</p>
   }
+  @let page = softDeletedResource.value().page;
   <ul class="deleted-list plain-list">
-    @for (department of softDeletedResource.value(); track department.id) {
+    @for (department of softDeletedResource.value().content; track department.id) {
       <li>
         <span class="deleted-name">{{ department.name }}</span>
         <button type="button" class="btn-secondary" (click)="onRestore(department.id)">Restore</button>
@@ -22,6 +23,20 @@
       <li class="empty">No disabled departments.</li>
     }
   </ul>
+
+  @if (page.totalPages > 1) {
+    <nav class="pager" aria-label="Pagination">
+      <button type="button" class="btn-secondary" (click)="goToPage(page.number - 1)" [disabled]="page.number === 0">Previous</button>
+      @for (p of pageNumbers(); track p; let i = $index) {
+        @if (i > 0 && p - pageNumbers()[i - 1] > 1) {
+          <span class="pager-gap">…</span>
+        }
+        <button type="button" class="pager-page" (click)="goToPage(p)" [disabled]="p === page.number"
+                [attr.aria-current]="p === page.number ? 'page' : null">{{ p + 1 }}</button>
+      }
+      <button type="button" class="btn-secondary" (click)="goToPage(page.number + 1)" [disabled]="page.number + 1 >= page.totalPages">Next</button>
+    </nav>
+  }
 } @else if (softDeletedResource.error()) {
   <p class="error">Could not load disabled departments.</p>
   <button type="button" (click)="softDeletedResource.reload()">Retry</button>

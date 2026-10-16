@@ -6,6 +6,7 @@ import { environment } from '../../environments/environment';
 import { Course } from '../courses/course';
 import { Department } from '../departments/department';
 import { RouterLink } from '@angular/router';
+import { Page } from '../shared/page';
 
 @Component({
   imports: [RouterLink],
@@ -23,35 +24,31 @@ export class Home {
       : undefined;
   });
 
-  protected readonly professorResource = httpResource<Course[]>(() => {
-    return this.user()?.role === 'PROFESSOR' ? `${environment.apiUrl}/courses` : undefined;
+  protected readonly professorResource = httpResource<Page<Course>>(() => {
+    return this.user()?.role === 'PROFESSOR' ? `${environment.apiUrl}/courses?lecturerId=${this.user()?.id}` : undefined;
   });
 
-  protected readonly professorCourses = computed(() => {
-    return this.professorResource.value()?.filter((course) => course.lecturerId === this.user()?.id);
-  });
-
-  protected readonly adminUserResource = httpResource<User[]>(() => {
-    return this.user()?.role === 'ADMIN' ? `${environment.apiUrl}/users` : undefined;
+  protected readonly adminUserResource = httpResource<Page<User>>(() => {
+    return this.user()?.role === 'ADMIN' ? `${environment.apiUrl}/users?size=1` : undefined;
   });
 
   protected readonly adminUserCount = computed(() => {
-    return this.adminUserResource.value()?.length;
+    return this.adminUserResource.value()?.page.totalElements;
   });
 
-  protected readonly adminCourseResource = httpResource<Course[]>(() => {
-    return this.user()?.role === 'ADMIN' ? `${environment.apiUrl}/courses` : undefined;
+  protected readonly adminCourseResource = httpResource<Page<Course>>(() => {
+    return this.user()?.role === 'ADMIN' ? `${environment.apiUrl}/courses?size=1` : undefined;
   });
 
   protected readonly adminCourseCount = computed(() => {
-    return this.adminCourseResource.value()?.length;
+    return this.adminCourseResource.value()?.page.totalElements;
   });
 
-  protected readonly adminDepartmentResource = httpResource<Department[]>(() => {
-    return this.user()?.role === 'ADMIN' ? `${environment.apiUrl}/departments` : undefined;
+  protected readonly adminDepartmentResource = httpResource<Page<Department>>(() => {
+    return this.user()?.role === 'ADMIN' ? `${environment.apiUrl}/departments?size=1` : undefined;
   });
 
   protected readonly adminDepartmentCount = computed(() => {
-    return this.adminDepartmentResource.value()?.length;
+    return this.adminDepartmentResource.value()?.page.totalElements;
   });
 }

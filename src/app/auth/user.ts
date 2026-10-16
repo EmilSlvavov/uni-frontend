@@ -51,3 +51,10 @@ export interface UserUpdatePassword {
   currentPassword: string
   newPassword: string
 }
+
+export interface UserSearchForm {
+  q: string;
+  role: RoleName | ''
+}
+
+export type RoleName = 'STUDENT' | 'PROFESSOR' | 'ADMIN'

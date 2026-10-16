@@ -9,19 +9,47 @@
   </div>
 </div>
 
+<form class="search-bar" role="search" (submit)="onSearch($event)" novalidate>
+  <div class="field search-field">
+    <label for="q">Search</label>
+    <input id="q" type="search" [formField]="searchForm.q" />
+  </div>
+
+  <button type="submit">Search</button>
+</form>
+
+
 @if (resource.hasValue()) {
   @if (resource.isLoading()) {
     <p class="status">Refreshing…</p>
   }
+  @let page = resource.value().page;
   <ul class="department-grid plain-list">
-    @for (department of resource.value(); track department.id) {
+    @for (department of resource.value().content; track department.id) {
       <li>
         <app-department-card [department]="department" />
       </li>
     } @empty {
-      <li class="empty">No departments yet.</li>
+      <li class="empty">{{ q() ? 'No departments match your search.' : 'No departments yet.' }}</li>
     }
   </ul>
+  @if (page.totalPages > 1) {
+    <nav class="pager" aria-label="Pagination">
+      <button type="button" class="btn-secondary" (click)="goToPage(page.number - 1)" [disabled]="page.number === 0">
+        Previous
+      </button>
+      @for (p of pageNumbers(); track p; let i = $index) {
+        @if (i > 0 && p - pageNumbers()[i - 1] > 1) {
+          <span class="pager-gap">…</span>
+        }
+        <button type="button" class="pager-page" (click)="goToPage(p)" [disabled]="p === page.number"
+                [attr.aria-current]="p === page.number ? 'page' : null">{{ p + 1 }}</button>
+      }
+      <button type="button" class="btn-secondary" (click)="goToPage(page.number + 1)"
+              [disabled]="page.number + 1 >= page.totalPages">Next
+      </button>
+    </nav>
+  }
 } @else if (resource.error()) {
   <p class="error">Could not load departments.</p>
 } @else {
